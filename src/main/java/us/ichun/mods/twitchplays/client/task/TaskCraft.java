@@ -1,5 +1,8 @@
 package us.ichun.mods.twitchplays.client.task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -14,9 +17,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TaskCraft extends Task {
     private String itemName;
@@ -43,6 +43,7 @@ public class TaskCraft extends Task {
         return 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void update() {
         String[] array = itemName.split(":");
@@ -83,7 +84,7 @@ public class TaskCraft extends Task {
                 ItemStack result = null;
                 ArrayList<Object> required = new ArrayList<Object>();
 
-                List recipes = CraftingManager.getInstance().getRecipeList();
+                List<?> recipes = CraftingManager.getInstance().getRecipeList();
                 for(Object o : recipes)
                 {
                     if(o instanceof ShapedRecipes)

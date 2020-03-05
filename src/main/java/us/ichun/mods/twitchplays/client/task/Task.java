@@ -1,11 +1,9 @@
 package us.ichun.mods.twitchplays.client.task;
 
 import com.google.common.collect.ImmutableList;
+
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 
 public abstract class Task
 {

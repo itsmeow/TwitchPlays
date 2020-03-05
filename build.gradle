@@ -1,9 +1,11 @@
 buildscript {
     repositories {
-        mavenCentral()
+        maven {
+            url = "https://repo.maven.apache.org/maven2"
+        }
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://files.minecraftforge.net/maven"
         }
         maven {
             name = "sonatype"
@@ -16,16 +18,24 @@ buildscript {
 }
 
 apply plugin: 'forge'
-
 // Requires iChunUtil to run. Just put iChunUtil-deobf.jar in the /libs/ folder or it won't compile.
-version = "4.0.0"
-group= "twitchplays" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "5.0.0"
+group= "twitchplays" 
 archivesBaseName = "TwitchPlays"
 
 minecraft {
     version = "1.7.10-10.13.2.1236"
     runDir = "eclipse"
 }
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
+dependencies {
+    embed "org.pircbotx:pircbotx:2.1"
+}
+
 processResources
 {
     // replace stuff in mcmod.info, nothing else
@@ -42,17 +52,9 @@ processResources
     }
 }
 
-// add source jar
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'source'
+jar {
+	manifest {
+		attributes 'FMLAT' : 'twitchplays_at.cfg'
+	}
+    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 }
-
-// deobf jars
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-}
-
-// make sure all of these happen when we run build
-build.dependsOn sourceJar, deobfJar

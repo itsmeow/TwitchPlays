@@ -68,7 +68,7 @@ public class TwitchPlays
                 config.createIntBoolProperty("minicam", "twitchplays.config.prop.minicam.name", "twitchplays.config.prop.minicam.comment", true, false, true);
                 config.createIntProperty("minicamSize", "twitchplays.config.prop.minicamSize.name", "twitchplays.config.prop.minicamSize.comment", true, false, 30, 5, 90);
                 config.createIntProperty("minicamDistance", "twitchplays.config.prop.minicamDistance.name", "twitchplays.config.prop.minicamDistance.comment", true, false, 100, 5, 500);
-                config.createIntBoolProperty("allowTwitchStaff", "twitchplays.config.prop.allowTwitchStaff.name", "twitchplays.config.prop.allowTwitchStaff.comment", true, false, false);
+                
                 config.createIntProperty("democracyTimer", "twitchplays.config.prop.democracyTimer.name", "twitchplays.config.prop.democracyTimer.comment", true, false, 10, 1, Integer.MAX_VALUE);
                 config.createIntProperty("inputMax", "twitchplays.config.prop.inputMax.name", "twitchplays.config.prop.inputMax.comment", true, false, 9, 1, 9);
 
@@ -77,7 +77,8 @@ public class TwitchPlays
                 config.createStringProperty("autoConnectName", "twitchplays.config.prop.autoConnectName.name", "twitchplays.config.prop.autoConnectName.comment", true, false, "");
                 config.createStringProperty("disabledTasks", "twitchplays.config.prop.disabledTasks.name", "twitchplays.config.prop.disabledTasks.comment", true, false, "");
                 config.createIntBoolProperty("antiMineDown", "twitchplays.config.prop.antiMineDown.name", "twitchplays.config.prop.antiMineDown.comment", true, false, false);
-
+                config.createStringProperty("token", "twitchplays.config.prop.token.name", "twitchplays.config.prop.token.comment", true, false, "");
+                config.createStringProperty("moderators", "twitchplays.config.prop.moderators.name", "twitchplays.config.prop.moderators.comment", true, false, "");
                 if(!ObfHelper.obfuscation)
                 {
                         config.createIntBoolProperty("twitchChatHook", "Twitch Chat Hook", "You might be crashing in dev environment cause of the Twitch Chat.\nEnable Twitch Chat Hook?", true, false, true);

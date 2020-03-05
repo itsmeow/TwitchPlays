@@ -37,7 +37,7 @@ public class TaskRegistry
 
     public static Task createTask(WorldClient world, EntityPlayerSP player, String...args)
     {
-        Class clz = tasks.get(args[0]);
+        Class<?> clz = tasks.get(args[0]);
 
         try
         {

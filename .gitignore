@@ -13,3 +13,8 @@
 /build
 /libs
 /src/api
+/bin/
+
+.classpath
+.project
+/.settings/

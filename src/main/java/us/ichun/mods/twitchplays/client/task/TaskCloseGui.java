@@ -3,9 +3,7 @@ package us.ichun.mods.twitchplays.client.task;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
-import us.ichun.mods.twitchplays.common.TwitchPlays;
 
 public class TaskCloseGui extends Task
 {

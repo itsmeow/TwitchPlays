@@ -34,3 +34,8 @@ twitchplays.command.started=Starting TwitchPlays session with %s's Twitch chat.
 
 twitchplays.chat.connected=Chat connected.
 twitchplays.chat.disconnected=Chat disconnected.
+
+twitchplays.config.prop.token.name=Twitch Token
+twitchplays.config.prop.token.comment=Use this to obtain a token https://twitchapps.com/tmi/
+twitchplays.config.prop.moderators.name=Moderator List (can run op commands)
+twitchplays.config.prop.moderators.comment=Specify a list of twitch usernames that can use op commands seperated by commas

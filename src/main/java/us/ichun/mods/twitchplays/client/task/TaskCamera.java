@@ -3,6 +3,7 @@ package us.ichun.mods.twitchplays.client.task;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.MathHelper;
+import us.ichun.mods.twitchplays.client.core.TickHandlerClient;
 import us.ichun.mods.twitchplays.common.TwitchPlays;
 
 public class TaskCamera extends Task
@@ -48,7 +49,7 @@ public class TaskCamera extends Task
                 }
             }
             TwitchPlays.tickHandlerClient.targetPitch = MathHelper.clamp_float(TwitchPlays.tickHandlerClient.targetPitch, -90F, 90F);
-            TwitchPlays.tickHandlerClient.turnTime = TwitchPlays.tickHandlerClient.TURN_TIME;
+            TwitchPlays.tickHandlerClient.turnTime = TickHandlerClient.TURN_TIME;
             TwitchPlays.tickHandlerClient.oriYaw = TwitchPlays.tickHandlerClient.camYaw;
             TwitchPlays.tickHandlerClient.oriPitch = TwitchPlays.tickHandlerClient.camPitch;
         }
@@ -71,7 +72,7 @@ public class TaskCamera extends Task
     }
 
     @Override
-    public boolean bypassOrder(String...args) { return args.length == 3 && (args[1].equals("dist") || args[1].equals("distance") || args[1].equals("size")); };
+    public boolean bypassOrder(String...args) { return args.length == 3 && (args[1].equals("dist") || args[1].equals("distance") || args[1].equals("size")); }
 
     @Override
     public boolean parse(String... args)

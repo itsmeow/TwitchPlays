@@ -1,6 +1,5 @@
 package us.ichun.mods.twitchplays.client.task;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import us.ichun.mods.twitchplays.common.TwitchPlays;
@@ -25,7 +24,7 @@ public class TaskShowMinicam extends Task
     }
 
     @Override
-    public boolean bypassOrder(String...args) { return true; };
+    public boolean bypassOrder(String...args) { return true; }
 
     @Override
     public boolean parse(String... args)

@@ -1,6 +1,22 @@
 package us.ichun.mods.twitchplays.client.core;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.lwjgl.opengl.GL11;
+import org.pircbotx.Configuration;
+import org.pircbotx.PircBotX;
+import org.pircbotx.exception.IrcException;
+import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.events.PartEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
+
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -16,32 +32,47 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.client.stream.ChatController;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.Session;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import org.lwjgl.opengl.GL11;
-import tv.twitch.chat.ChatMessage;
-import tv.twitch.chat.ChatUserInfo;
-import tv.twitch.chat.ChatUserMode;
 import us.ichun.mods.twitchplays.client.task.Task;
 import us.ichun.mods.twitchplays.client.task.TaskRegistry;
 import us.ichun.mods.twitchplays.common.TwitchPlays;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-public class TickHandlerClient
-        implements ChatController.ChatListener
+public class TickHandlerClient extends ListenerAdapter
 {
+    public PircBotX chat;
+    public Thread botThread;
+
     public TickHandlerClient()
     {
-        chatController = new ChatController();
-        chatController.func_152990_a(this);
-        chatController.func_152984_a("nmt37qblda36pvonovdkbopzfzw3wlq");
+        Configuration configuration = new Configuration.Builder()
+        .setName("TwitchPlaysController")
+        .addServer("irc.chat.twitch.tv", 6667)
+        .setServerPassword(TwitchPlays.config.getString("token"))
+        .addListener(this)
+        .buildConfiguration();
+        chat = new PircBotX(configuration);
+        botThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    chat.startBot();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                } catch(IrcException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        botThread.start();
 
         if(TwitchPlays.config.getInt("minicam") == 1)
         {
@@ -72,7 +103,6 @@ public class TickHandlerClient
 
             renderTaskQueue(event);
 
-            chatController.func_152997_n(); //updater
 
             if(mc.theWorld != worldInstance)
             {
@@ -96,7 +126,7 @@ public class TickHandlerClient
         {
             init = false;
 
-            chatController.func_153002_l();
+            chat.sendRaw().rawLine("PART #" + chatOwner);
             chatOwner = "";
         }
     }
@@ -119,21 +149,10 @@ public class TickHandlerClient
 
             if(ObfHelper.obfuscation || !ObfHelper.obfuscation && TwitchPlays.config.getInt("twitchChatHook") == 1)
             {
-                chatController.field_153010_h = true;
-                chatController.func_152998_c(chatOwner);
-                chatController.func_152985_f(chatOwner);
-                chatController.field_153005_c = chatOwner;
-                //These lines occasionally crash in dev env. I do not know why. -iChun
+                chat.sendIRC().joinChannel("#" + chatOwner);
+                
             }
 
-            //field_153010_h connectAnonymously
-            //func_152997_n connectToChat
-            //func_153000_j chatState
-            //func_152991_c isConnected
-            //func_152993_m shutdown
-            //func_152985_f initialize(name) ???
-            //func_152997_n update
-            //func_153002_l disconnect
         }
     }
 
@@ -690,61 +709,66 @@ public class TickHandlerClient
     public int turnTime;
     public static final int TURN_TIME = 10;
 
-    public ChatController chatController;
     public String chatOwner = "";
     public boolean forceOpInput;
 
     @Override
-    public void func_152903_a(ChatMessage[] messages) //on chat message
-    {
+    public synchronized void onGenericMessage(final GenericMessageEvent event) throws Exception {
         Minecraft mc = Minecraft.getMinecraft();
-        if(mc.theWorld != null)
-        {
-            for(ChatMessage msg : messages)
-            {
-                if(msg != null && msg.modes != null && !msg.modes.contains(ChatUserMode.TTV_CHAT_USERMODE_BANNED))
-                {
-                    boolean isOp = msg.modes.contains(ChatUserMode.TTV_CHAT_USERMODE_MODERATOR) || msg.modes.contains(ChatUserMode.TTV_CHAT_USERMODE_BROADCASTER) || TwitchPlays.config.getInt("allowTwitchStaff") == 1 && (msg.modes.contains(ChatUserMode.TTV_CHAT_USERMODE_STAFF) || msg.modes.contains(ChatUserMode.TTV_CHAT_USERMODE_ADMINSTRATOR));
-                    boolean isTask = parseChat(mc.theWorld, mc.thePlayer, msg.message, msg.userName, isOp);
-                    ChatComponentText message = new ChatComponentText("");
-                    message.getChatStyle().setColor(EnumChatFormatting.DARK_PURPLE);
-                    message.appendText((isOp ? "<@" : "<") + msg.userName + "> ");
-                    ChatComponentText text = new ChatComponentText(msg.message);
-                    text.getChatStyle().setColor(isTask ? EnumChatFormatting.GRAY : EnumChatFormatting.WHITE);
-                    message.appendSibling(text);
-                    mc.thePlayer.addChatMessage(message);
+        if(mc.theWorld != null) {
+            mc.func_152344_a(new Runnable() {
+
+                @Override
+                public void run() {
+                    String msg = event.getMessage();
+                    String name = event.getUser().getLogin();
+                    if(msg != null && !msg.isEmpty()) {
+                        boolean isOp = Lists.newArrayList(TwitchPlays.config.getString("moderators").split(",")).contains(name);
+                        boolean isTask = parseChat(Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().thePlayer, msg, name, isOp);
+                        ChatComponentText message = new ChatComponentText("");
+                        message.getChatStyle().setColor(EnumChatFormatting.DARK_PURPLE);
+                        message.appendText((isOp ? "<@" : "<") + name + "> ");
+                        ChatComponentText text = new ChatComponentText(msg);
+                        text.getChatStyle().setColor(isTask ? EnumChatFormatting.GRAY : EnumChatFormatting.WHITE);
+                        message.appendSibling(text);
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(message);
+                    }
+
+                }
+            });
+
+        }
+    }
+
+    @Override
+    public synchronized void onJoin(final JoinEvent event) throws Exception // On chat connect
+    {
+        Minecraft.getMinecraft().func_152344_a(new Runnable() {
+            @Override
+            public void run() {
+
+                if(event.getUser() == chat.getUserBot()) {
+                    if(init && Minecraft.getMinecraft().thePlayer != null) {
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("twitchplays.chat.connected").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GRAY).setItalic(true)));
+                    }
                 }
             }
-        }
+        });
     }
 
     @Override
-    public void func_152904_a(ChatUserInfo[] p_152904_1_, ChatUserInfo[] p_152904_2_, ChatUserInfo[] p_152904_3_)//chat channel user change callback..?
+    public synchronized void onPart(final PartEvent event) throws Exception // On chat disconnect
     {
+        Minecraft.getMinecraft().func_152344_a(new Runnable() {
+            @Override
+            public void run() {
 
-    }
-
-    @Override
-    public void func_152906_d() //On chat connect
-    {
-        if(init && Minecraft.getMinecraft().thePlayer != null)
-        {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("twitchplays.chat.connected").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GRAY).setItalic(true)));
-        }
-    }
-
-    @Override
-    public void func_152905_e() //On chat disconnect
-    {
-        if(Minecraft.getMinecraft().thePlayer != null)
-        {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("twitchplays.chat.disconnected").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GRAY).setItalic(true)));
-        }
-    }
-
-    @Override
-    public void func_152902_f() //on chat clear
-    {
-
+                if(event.getUser() == chat.getUserBot()) {
+                    if(Minecraft.getMinecraft().thePlayer != null) {
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("twitchplays.chat.disconnected").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.GRAY).setItalic(true)));
+                    }
+                }
+            }
+        });
     }
 }
