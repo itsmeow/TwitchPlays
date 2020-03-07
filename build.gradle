@@ -13,12 +13,15 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
-
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'java'
+}
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "${project.mc_version}-${project.mod_version}"
-group= "${project.mod_id}" 
-archivesBaseName = "${project.maven_group}"
+group= "${project.maven_group}" 
+archivesBaseName = "${project.mod_id}"
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
@@ -31,13 +34,36 @@ minecraft {
     mappings = "${project.mcp_mappings}"
     replace "@VERSION@", "${project.mod_version}"
 }
-configurations {
-    embed
-    compile.extendsFrom(embed)
+
+repositories {
+   flatDir {
+       dirs 'libs'
+   }
 }
 
 dependencies {
-    embed "org.pircbotx:pircbotx:2.1"
+    shadow "org.pircbotx:pircbotx:2.3-SNAPSHOT"
+    shadow "org.slf4j:slf4j-api:1.7.13"
+    shadow "org.slf4j:slf4j-nop:1.7.13"
+    shadow "com.google.guava:guava:27.0-jre"
+    shadow "org.apache.commons:commons-lang3:3.4"
+}
+
+shadowJar {
+    classifier = ''
+    relocate "com.google", "shadow.twitchplays.google"
+    relocate "org.apache.commons", "shadow.twitchplays.apache.commons"
+    relocate "org.slf4j", "shadow.twitchplays.slf4j"
+}
+
+reobf {
+    shadowJar { mappingType = 'SEARGE' }
+}
+
+tasks.build.dependsOn reobfShadowJar
+
+artifacts {
+    archives shadowJar
 }
 
 processResources {
@@ -57,9 +83,9 @@ processResources {
 }
 
 jar {
+    classifier = 'slim'
 	manifest.mainAttributes(
             "Implementation-Title": archivesBaseName,
             "Implementation-Version": project.version,
             "FMLAT": "twitchplays_at.cfg")
-    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 }
