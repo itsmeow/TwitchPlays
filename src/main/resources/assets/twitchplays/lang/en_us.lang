@@ -1,0 +1,43 @@
+twitchplays.config.minicam_enabled=Enable Minicam
+twitchplays.config.minicam_scale=Minicam Scale
+twitchplays.config.minicam_distance=Minicam Distance
+twitchplays.config.democracy_timer=Democracy Timer
+twitchplays.config.use_game_chat=Use Game Chat
+twitchplays.config.auto_connect_channel=Auto Connect to Channel
+twitchplays.config.tasks_enabled=Tasks Enabled
+twitchplays.config.input_max=Max Input Chain
+twitchplays.config.anti_mine_down=Anti Mine Down
+
+twitchplays.config.minicam_enabled.tooltip=Enable Minicam?\nMinicam either shows a third person/first person view of the player, depending on whichever view is on the main cam.
+twitchplays.config.minicam_scale.tooltip=Minicam size on screen (percentage)
+twitchplays.config.minicam_distance.tooltip=Minicam distance (in tenths of a block)
+twitchplays.config.democracy_timer.tooltip=How long till each democracy poll, if in democracy mode (in seconds)
+twitchplays.config.use_game_chat.tooltip=Decides if commands are accepted from ingame chat or not
+twitchplays.config.auto_connect_channel.tooltip=Channel name of chat to automatically connect to when joining a world. Leave blank to disable.
+twitchplays.config.tasks_enabled.tooltip=List of task names with values. true to enable, false to disable.
+twitchplays.config.input_max.tooltip=Maximum chain of commands from one text message.
+twitchplays.config.anti_mine_down.tooltip=Try to prevent Twitch users from mining downwards.
+
+twitchplays.command.help=Enter command for list of arguments.
+
+twitchplays.command.start=/twitchplays start <twitchname> - Start a new TwitchPlays session with <twitchname>'s chat
+twitchplays.command.end=/twitchplays end - End current TwitchPlays session
+
+twitchplays.command.ended=Session with %s's Twitch chat ended.
+twitchplays.command.noSession=No current TwitchPlays session.
+twitchplays.command.alreadyStarted=Already started a session with %s's Twitch chat.
+twitchplays.command.started=Starting TwitchPlays session with %s's Twitch chat.
+
+twitchplays.chat.connected=Chat connected.
+twitchplays.chat.disconnected=Chat disconnected.
+twitchplays.chat.token=You need to set a Twitch user authentication token in your mod configuration to use TwitchPlays! Obtain a token here: https://twitchapps.com/tmi/
+
+twitchplays.config.twitch.token=Twitch Token
+twitchplays.config.twitch.token.tooltip=Use this to obtain a token https://twitchapps.com/tmi/
+twitchplays.config.twitch.moderators=Moderator List (can run op commands)
+twitchplays.config.twitch.moderators.tooltip=Specify a list of twitch usernames that can use op commands seperated by commas
+twitchplays.config.use_democracy=Use Democracy
+twitchplays.config.use_democracy.tooltip=When enabled will collect votes on what command to run every (democracy_timer) seconds and then execute it
+
+twitchplays.config.category.twitch=Twitch (DO NOT OPEN ON STREAM!)
+twitchplays.config.category.twitch.tooltip=SERIOUSLY, DON'T LEAK YOUR OAUTH KEY.

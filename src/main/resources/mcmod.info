@@ -1,0 +1,16 @@
+[
+{
+  "modid": "twitchplays",
+  "name": "Twitch Plays",
+  "description": "A fork of an ancient iChun repo that was never released. Let your Twitch stream control your game!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["its_meow", "iChun"],
+  "credits": "its_meow: Updating to 1.12, adding features, fixing bugs, maintenance - iChun: original codebase",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

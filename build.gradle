@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        jcenter()
         maven {
             url = "https://repo.maven.apache.org/maven2"
         }
@@ -7,25 +8,28 @@ buildscript {
             name = "forge"
             url = "https://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
-apply plugin: 'forge'
-// Requires iChunUtil to run. Just put iChunUtil-deobf.jar in the /libs/ folder or it won't compile.
-version = "5.0.0"
-group= "twitchplays" 
-archivesBaseName = "TwitchPlays"
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "${project.mc_version}-${project.mod_version}"
+group= "${project.mod_id}" 
+archivesBaseName = "${project.maven_group}"
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
 
 minecraft {
-    version = "1.7.10-10.13.2.1236"
-    runDir = "eclipse"
+    version = "${project.mc_version}-${project.forge_version}"
+    runDir = "run"
+    mappings = "${project.mcp_mappings}"
+    replace "@VERSION@", "${project.mod_version}"
 }
 configurations {
     embed
@@ -36,25 +40,26 @@ dependencies {
     embed "org.pircbotx:pircbotx:2.1"
 }
 
-processResources
-{
-    // replace stuff in mcmod.info, nothing else
+processResources {
+    inputs.property "version", "${project.mod_version}"
+    inputs.property "mcversion", "${project.mc_version}"
+
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
                 
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':"${project.version}", 'mcversion':"${project.mc_version}"
     }
         
-    // copy everything else, thats not the mcmod.info
+  
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
 
 jar {
-	manifest {
-		attributes 'FMLAT' : 'twitchplays_at.cfg'
-	}
+	manifest.mainAttributes(
+            "Implementation-Title": archivesBaseName,
+            "Implementation-Version": project.version,
+            "FMLAT": "twitchplays_at.cfg")
     from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 }
