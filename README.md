@@ -11,17 +11,17 @@ PircBotX - GNU GPLv3: https://github.com/pircbotx/pircbotx
 
 No changes.
 
-#### PircBotX Dependencies:
+### PircBotX Dependencies:
 
-##### SLF4J (api/nop) 1.7.13 - MIT License: http://www.slf4j.org/
-
-No changes.
-
-##### Google Guava/Commons 19.0 - Apache License 2.0: https://github.com/google/guava/ http://www.apache.org/licenses/LICENSE-2.0
+#### SLF4J (api/nop) 1.7.13 - MIT License: http://www.slf4j.org/
 
 No changes.
 
-##### Apache Commons Lang 3 3.4 - Apache License 2.0: https://commons.apache.org/proper/commons-lang/ http://www.apache.org/licenses/LICENSE-2.0
+#### Google Guava/Commons 19.0 - Apache License 2.0: https://github.com/google/guava/ http://www.apache.org/licenses/LICENSE-2.0
+
+No changes.
+
+#### Apache Commons Lang 3 3.4 - Apache License 2.0: https://commons.apache.org/proper/commons-lang/ http://www.apache.org/licenses/LICENSE-2.0
 
 No changes.
 ```
@@ -33,7 +33,7 @@ This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
 ```
 
-##### Apache Commons Codec 1.10 - Apache License 2.0: https://commons.apache.org/proper/commons-codec/
+#### Apache Commons Codec 1.10 - Apache License 2.0: https://commons.apache.org/proper/commons-codec/
 
 No changes.
 ```
