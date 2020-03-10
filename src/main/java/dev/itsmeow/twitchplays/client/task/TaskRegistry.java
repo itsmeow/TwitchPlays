@@ -81,6 +81,8 @@ public class TaskRegistry
         registerTask("look", "look", TaskLook.class);//look <up,down,left,right>
         registerTask("jump", "jump", TaskJump.class);//jump [forward/backward/left/right]
         registerTask("swim", "jump", TaskJump.class);
+        
+        registerTask("fly", "fly", TaskFly.class);//fly [up/down]
 
         registerTask("camera", "camera", TaskCamera.class);//camera <up,down,left,right,distance 5-500,size 5-90>
         registerTask("cam", "camera", TaskCamera.class);
