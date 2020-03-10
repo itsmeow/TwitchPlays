@@ -134,10 +134,10 @@ public class TaskJump extends Task {
 
     public static enum JumpType {
         UP(false, "up"),
-        FOWARD(true, "forward", "fwd", "f"),
-        BACK(true, "backward", "back", "bck", "b"),
-        LEFT(false, "left", "l"),
-        RIGHT(false, "right", "r");
+        FOWARD(true, "forward", "fwd", "f", "w"),
+        BACK(true, "backward", "back", "bck", "b", "s"),
+        LEFT(false, "left", "l", "a"),
+        RIGHT(false, "right", "r", "d");
 
         private List<String> validNames;
         private String primaryName;
