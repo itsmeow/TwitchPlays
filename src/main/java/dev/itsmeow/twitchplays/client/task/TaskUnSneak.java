@@ -16,11 +16,16 @@ public class TaskUnSneak extends Task {
 
     @Override
     public int maxActiveTime() {
-        return 1;
+        return 0;
     }
 
     @Override
-    protected void update() {
+    public boolean bypassOrder(String... args) {
+        return true;
+    }
+
+    @Override
+    public void init() {
         Minecraft.getMinecraft().gameSettings.keyBindSneak.pressed = false;
     }
 
@@ -32,5 +37,10 @@ public class TaskUnSneak extends Task {
     @Override
     public String getDisplayName() {
         return "unsneak";
+    }
+
+    @Override
+    protected void update() {
+        
     }
 }

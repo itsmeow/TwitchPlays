@@ -16,12 +16,22 @@ public class TaskToggleSneak extends Task {
 
     @Override
     public int maxActiveTime() {
-        return 1;
+        return 0;
+    }
+
+    @Override
+    public boolean bypassOrder(String... args) {
+        return true;
+    }
+
+    @Override
+    public void init() {
+        Minecraft.getMinecraft().gameSettings.keyBindSneak.pressed = !Minecraft.getMinecraft().gameSettings.keyBindSneak.pressed;
     }
 
     @Override
     protected void update() {
-        Minecraft.getMinecraft().gameSettings.keyBindSneak.pressed = !Minecraft.getMinecraft().gameSettings.keyBindSneak.pressed;
+
     }
 
     @Override
