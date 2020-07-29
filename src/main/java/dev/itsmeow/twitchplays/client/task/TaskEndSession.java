@@ -1,5 +1,6 @@
 package dev.itsmeow.twitchplays.client.task;
 
+import dev.itsmeow.twitchplays.TwitchPlays;
 import dev.itsmeow.twitchplays.client.ChatTaskHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -15,7 +16,9 @@ public class TaskEndSession extends Task {
 
     @Override
     public void init() {
-        player.sendMessage(new TextComponentTranslation("twitchplays.command.ended", ChatTaskHandler.getSessionChannel()).setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
+        if(!TwitchPlays.Options.HIDE_STATUS_MESSAGES) {
+            player.sendMessage(new TextComponentTranslation("twitchplays.command.ended", ChatTaskHandler.getSessionChannel()).setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
+        }
         ChatTaskHandler.endSession();
     }
 

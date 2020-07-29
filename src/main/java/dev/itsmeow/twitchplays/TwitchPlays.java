@@ -32,18 +32,8 @@ public class TwitchPlays {
     @Config(modid = MOD_ID)
     public static class Options {
 
-        @Config.LangKey("twitchplays.config.minicam_enabled")
-        public static boolean MINICAM_ENABLED = true;
-
-        @Config.LangKey("twitchplays.config.minicam_scale")
-        @Config.RangeInt(min = 5, max = 90)
-        @Config.SlidingOption
-        public static int MINICAM_SCALE = 30;
-
-        @Config.LangKey("twitchplays.config.minicam_distance")
-        @Config.RangeInt(min = 5, max = 500)
-        @Config.SlidingOption
-        public static int MINICAM_DISTANCE = 100;
+        @Config.LangKey("twitchplays.config.show_task_queue")
+        public static boolean SHOW_TASK_QUEUE = true;
 
         @Config.LangKey("twitchplays.config.use_democracy")
         public static boolean USE_DEMOCRACY = false;
@@ -54,6 +44,12 @@ public class TwitchPlays {
 
         @Config.LangKey("twitchplays.config.use_game_chat")
         public static boolean USE_GAME_CHAT = false;
+
+        @Config.LangKey("twitchplays.config.show_twitch_chat_ingame")
+        public static boolean SHOW_TWITCH_CHAT_INGAME = true;
+
+        @Config.LangKey("twitchplays.config.hide_status_messages")
+        public static boolean HIDE_STATUS_MESSAGES = false;
 
         @Config.LangKey("twitchplays.config.auto_connect_channel")
         @Config.RequiresWorldRestart

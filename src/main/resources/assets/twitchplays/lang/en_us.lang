@@ -1,22 +1,22 @@
-twitchplays.config.minicam_enabled=Enable Minicam
-twitchplays.config.minicam_scale=Minicam Scale
-twitchplays.config.minicam_distance=Minicam Distance
+twitchplays.config.show_task_queue=Show Task Queue
 twitchplays.config.democracy_timer=Democracy Timer
 twitchplays.config.use_game_chat=Use Game Chat
 twitchplays.config.auto_connect_channel=Auto Connect to Channel
 twitchplays.config.tasks_enabled=Tasks Enabled
 twitchplays.config.input_max=Max Input Chain
 twitchplays.config.anti_mine_down=Anti Mine Down
+twitchplays.config.hide_status_messages=Hide Status Messages
+twitchplays.config.show_twitch_chat_ingame=Show Twitch Chat Ingame
 
-twitchplays.config.minicam_enabled.tooltip=Enable Minicam?\nMinicam either shows a third person/first person view of the player, depending on whichever view is on the main cam.
-twitchplays.config.minicam_scale.tooltip=Minicam size on screen (percentage)
-twitchplays.config.minicam_distance.tooltip=Minicam distance (in tenths of a block)
+twitchplays.config.show_task_queue.tooltip=Set to false to hide task queue on screen.
 twitchplays.config.democracy_timer.tooltip=How long till each democracy poll, if in democracy mode (in seconds)
 twitchplays.config.use_game_chat.tooltip=Decides if commands are accepted from ingame chat or not
 twitchplays.config.auto_connect_channel.tooltip=Channel name of chat to automatically connect to when joining a world. Leave blank to disable.
 twitchplays.config.tasks_enabled.tooltip=List of task names with values. true to enable, false to disable.
 twitchplays.config.input_max.tooltip=Maximum chain of commands from one text message.
 twitchplays.config.anti_mine_down.tooltip=Try to prevent Twitch users from mining downwards.
+twitchplays.config.hide_status_messages.tooltip=Hides starting/stopping messages from the mod.
+twitchplays.config.show_twitch_chat_ingame.tooltip=Whether to copy twitch chat messages into the game chat.
 
 twitchplays.command.help=Enter command for list of arguments.
 
