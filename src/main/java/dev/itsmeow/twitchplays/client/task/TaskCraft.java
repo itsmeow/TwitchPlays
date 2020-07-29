@@ -1,6 +1,7 @@
 package dev.itsmeow.twitchplays.client.task;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockWorkbench;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.init.Blocks;
@@ -67,6 +68,8 @@ public class TaskCraft extends Task {
             int x = (int) Math.floor(player.posX);
             int y = (int) Math.floor(player.getEntityBoundingBox().minY);
             int z = (int) Math.floor(player.posZ);
+            
+            int tableX = 0, tableY = 0, tableZ = 0;
 
             for(int i = x - 4; i <= x + 4; i++) {
                 for(int j = y - 4; j <= y + 4; j++) {
@@ -76,6 +79,9 @@ public class TaskCraft extends Task {
                             RayTraceResult ray = world.rayTraceBlocks(new Vec3d(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ), new Vec3d(i + 0.5D, j + 0.5D, k + 0.5D));
                             if(ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK && ray.getBlockPos().getX() == i && ray.getBlockPos().getY() == j && ray.getBlockPos().getZ() == k) {
                                 gridSize = 3;
+                                tableX = i;
+                                tableY = j;
+                                tableZ = k;
                                 break;
                             }
                         }
@@ -122,7 +128,11 @@ public class TaskCraft extends Task {
                 }
             }
             if(result != null && required != null) {
-                // TODO craft
+                if(gridSize == 3) {
+                    player.displayGui(new BlockWorkbench.InterfaceCraftingTable(player.world, new BlockPos(tableX, tableY, tableZ)));
+                } else {
+                    
+                }
             }
         }
     }

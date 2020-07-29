@@ -87,16 +87,13 @@ public class ChatTaskHandler extends ListenerAdapter {
         .addListener(INSTANCE)
         .buildConfiguration();
         chat = new PircBotX(configuration);
-        botThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    chat.startBot();
-                } catch(IOException e) {
-                    e.printStackTrace();
-                } catch(IrcException e) {
-                    e.printStackTrace();
-                }
+        botThread = new Thread(() -> {
+            try {
+                chat.startBot();
+            } catch(IOException e) {
+                e.printStackTrace();
+            } catch(IrcException e) {
+                e.printStackTrace();
             }
         });
         botThread.start();
@@ -198,10 +195,7 @@ public class ChatTaskHandler extends ListenerAdapter {
         if(event.phase == TickEvent.Phase.END) {
             Minecraft mc = Minecraft.getMinecraft();
             if(mc.world != null) {
-                TickHandlerClient.updateCameraAngles();
-
                 if(clock != mc.world.getWorldTime() || !mc.world.getGameRules().getBoolean("doDaylightCycle")) {
-                    TickHandlerClient.updateMinicam();
                     clock = mc.world.getWorldTime();
                     if(!tasks.isEmpty()) {
                         Task task = tasks.get(0);
@@ -330,13 +324,15 @@ public class ChatTaskHandler extends ListenerAdapter {
                         String name = event.getUser().getLogin();
                         boolean isOp = Lists.newArrayList(Options.Twitch.MODERATORS).contains(name);
                         boolean isTask = parseChat(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player, msg, name, isOp);
-                        TextComponentString message = new TextComponentString("");
-                        message.getStyle().setColor(TextFormatting.DARK_PURPLE);
-                        message.appendText((isOp ? "<@" : "<") + name + "> ");
-                        TextComponentString text = new TextComponentString(msg);
-                        text.getStyle().setColor(isTask ? TextFormatting.GRAY : TextFormatting.WHITE);
-                        message.appendSibling(text);
-                        Minecraft.getMinecraft().player.sendMessage(message);
+                        if(TwitchPlays.Options.SHOW_TWITCH_CHAT_INGAME) {
+                            TextComponentString message = new TextComponentString("");
+                            message.getStyle().setColor(TextFormatting.DARK_PURPLE);
+                            message.appendText((isOp ? "<@" : "<") + name + "> ");
+                            TextComponentString text = new TextComponentString(msg);
+                            text.getStyle().setColor(isTask ? TextFormatting.GRAY : TextFormatting.WHITE);
+                            message.appendSibling(text);
+                            Minecraft.getMinecraft().player.sendMessage(message);
+                        }
                     }
                 }
 
@@ -347,24 +343,28 @@ public class ChatTaskHandler extends ListenerAdapter {
 
     @Override
     public void onJoin(final JoinEvent event) throws Exception {
-        Minecraft.getMinecraft().addScheduledTask(() -> {
-            if(event.getUser() == chat.getUserBot()) {
-                if(sessionRunning && Minecraft.getMinecraft().player != null) {
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("twitchplays.chat.connected").setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
+        if(!TwitchPlays.Options.HIDE_STATUS_MESSAGES) {
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                if(event.getUser() == chat.getUserBot()) {
+                    if(sessionRunning && Minecraft.getMinecraft().player != null) {
+                        Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("twitchplays.chat.connected").setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
     public void onPart(final PartEvent event) throws Exception {
-        Minecraft.getMinecraft().addScheduledTask(() -> {
-            if(event.getUser() == chat.getUserBot()) {
-                if(Minecraft.getMinecraft().player != null) {
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("twitchplays.chat.disconnected").setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
+        if(!TwitchPlays.Options.HIDE_STATUS_MESSAGES) {
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                if(event.getUser() == chat.getUserBot()) {
+                    if(Minecraft.getMinecraft().player != null) {
+                        Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("twitchplays.chat.disconnected").setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /*

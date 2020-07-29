@@ -1,6 +1,12 @@
 package dev.itsmeow.twitchplays.client.task;
 
-import dev.itsmeow.twitchplays.client.task.TaskCamera.CameraMoveType;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.math.MathHelper;
@@ -65,5 +71,48 @@ public class TaskLook extends Task {
     public void terminate() {
         player.rotationYaw = targetYaw;
         player.rotationPitch = targetPitch;
+    }
+
+    public static enum CameraMoveType {
+        UP(true, "up", "u"),
+        DOWN(true, "down", "d"),
+        LEFT(false, "left", "l"),
+        RIGHT(false, "right", "r");
+
+        private List<String> validNames;
+        private String primaryName;
+        private boolean isPitch;
+
+        private CameraMoveType(boolean isPitch, String... names) {
+            this.validNames = Lists.newArrayList(names);
+            this.primaryName = names[0];
+            this.isPitch = isPitch;
+        }
+
+        public String getPrimaryName() {
+            return this.primaryName;
+        }
+
+        public ImmutableList<String> getNames() {
+            return ImmutableList.copyOf(this.validNames);
+        }
+
+        public boolean isPitch() {
+            return this.isPitch;
+        }
+
+        public boolean isValid(String name) {
+            return validNames.contains(name);
+        }
+
+        @Nullable
+        public static CameraMoveType getType(String name) {
+            for(CameraMoveType type : CameraMoveType.values()) {
+                if(type.isValid(name)) {
+                    return type;
+                }
+            }
+            return null;
+        }
     }
 }

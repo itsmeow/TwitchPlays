@@ -60,6 +60,7 @@ public class TaskRegistry
 
     static
     {
+        /*
         registerTask("forward", "move", TaskMovement.class);
         registerTask("fwd", "move", TaskMovement.class);
         registerTask("f", "move", TaskMovement.class);
@@ -111,11 +112,20 @@ public class TaskRegistry
 
         registerTask("place", "place", TaskPlaceBlock.class);
 
-        registerTask("craft", "craft", TaskCraft.class);// craft <itemname> [meta](default 2x2 grid. Be within range [4x4x4] of a crafting table to use a 3x3 grid)
+        //registerTask("craft", "craft", TaskCraft.class);// craft <itemname> [meta](default 2x2 grid. Be within range [4x4x4] of a crafting table to use a 3x3 grid)
 
         registerTask("interact", "interact", TaskInteract.class);
         registerTask("use", "interact", TaskInteract.class);
-
+        registerTask("inventory", "inventory", TaskOpenInventory.class);
+        registerTask("e", "inventory", TaskOpenInventory.class);
+        */
+        
+        registerTask("troll", "drop", TaskDrop.class);
+        registerTask("lmao", "inventory", TaskOpenInventory.class);
+        registerTask("trolling", "jump", TaskJump.class);
+        registerTask("quack", "pause", TaskOpenPauseMenu.class);
+        registerTask("idot", "exitgame", TaskExitGame.class);
+        
         // mod/op only tasks
         registerTask("cleartasks", "cleartasks", TaskClearTasks.class);
         registerTask("endtask", "endtask", TaskEndTask.class);
@@ -123,7 +133,6 @@ public class TaskRegistry
         registerTask("endsession", "endsession", TaskEndSession.class);
 
         registerTask("togglethirdperson", "togglethirdperson", TaskToggleThirdPerson.class);
-        registerTask("toggleminicam", "toggleminicam", TaskShowMinicam.class);
 
         registerTask("twitchinput", "twitchinput", TaskToggleTwitchInput.class);// twitchinput [mods/all]
 
